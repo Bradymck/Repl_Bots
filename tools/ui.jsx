@@ -5,6 +5,48 @@ import { getChainByChainId } from "evm-chains";
 import styled, { createGlobalStyle } from "styled-components";
 import microtip from "microtip/microtip.css";
 import { X, ChevronRight, Upload, Eye, Edit2, Play } from "react-feather";
+import JSBI from 'jsbi';
+
+const x = JSBI.BigInt('1234567890123456789012345678901234567890');
+const y = JSBI.BigInt('1234567890123456789012345678901234567890');
+const result = JSBI.add(x, y);
+
+console.log(result.toString()); // "2469135780246913578024691357802469135780"
+
+import '@rainbow-me/rainbowkit/styles.css';
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  base,
+  zora,
+} from 'wagmi/chains';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
+const { chains, publicClient } = configureChains(
+  [mainnet, polygon, optimism, arbitrum, base, zora],
+  [
+    alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
+    publicProvider()
+  ]
+);
+const mySecret = process.env['YOUR_PROJECT_ID']
+const { connectors } = getDefaultWallets({
+  appName: 'TPP',
+  projectId: 'YOUR_PROJECT_ID',
+  chains
+});
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient
+})
 
 // DO NOT EDIT THIS
 const REPLIT_CHAIN_ID = 1919250540;
